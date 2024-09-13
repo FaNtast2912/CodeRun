@@ -1,5 +1,5 @@
 import UIKit
-
+import Foundation
 
 
 //let numbers = Int(readLine()!)!
@@ -7,36 +7,37 @@ import UIKit
 
 
 let numbers = 5
-let arr = [1,2,1,2,2]
-let int: UInt
+let array = [1,2,3,4,5]
 
+//let imputLenght = Int(readLine()!)!
+//let array = readLine()!.split(separator: " ").map{ Int($0)!}
 
-func isPalendrome(array: [Int], numbers: Int) {
-    var totalArr = array
-    var answerArr = [Int]()
-    var numbersAdded = 0
-
-    if array.count < 1 {
-        print(numbersAdded)
-    } else {
-        var right = numbers - 1
-        var left = right - 1
-        while left >= 0 {
-            if totalArr != totalArr.reversed() {
-                if array[left] != array[right] {
-                    answerArr.append(array[left])
-                    totalArr.append(array[left])
-                    numbersAdded += 1
-                    left -= 1
-                } else {
-                    left -= 1
-                }
-            }
+func isPalendrome(for arr: [Int], startIdx: Int, endIdx: Int) -> Bool {
+    var startIdx = startIdx
+    var endIdx = endIdx
+    while startIdx < endIdx {
+        if arr[startIdx] != arr[endIdx] {
+            return false
         }
-        print(numbersAdded)
-        print(answerArr.isEmpty ? "" : answerArr.map{String($0)}.joined(separator: " "))
+        startIdx += 1
+        endIdx -= 1
     }
+    return true
 }
-isPalendrome(array: arr, numbers: numbers)
 
+var result: [String] = []
+var startPosition = 0
+var endPosition = array.count - 1
 
+while startPosition <= endPosition && array.count > 1 {
+    guard !isPalendrome(for: array, startIdx: startPosition, endIdx: endPosition) else {
+        break
+    }
+    result.append("\(array[startPosition])")
+    startPosition += 1
+}
+
+print(result.count)
+if !result.isEmpty {
+    print(result.reversed().joined(separator: "  "))
+}
