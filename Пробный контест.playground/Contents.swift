@@ -168,3 +168,14 @@ func createDictionary3(){
     }
 }
 //createDictionary3()
+
+let file = FileHandle.standardInput
+
+while true {
+    let data = file.availableData
+    print("\(String(bytes: data, encoding: .utf8)!)")
+    let scanner = Scanner(string: String(bytes: data, encoding: .utf8)!)
+    print(scanner.scanUpToCharacters(from: CharacterSet.decimalDigits)!)
+    print(scanner.scanUpToCharacters(from: CharacterSet.letters)!)
+    print(scanner.scanUpToCharacters(from: CharacterSet.decimalDigits)!)
+}
