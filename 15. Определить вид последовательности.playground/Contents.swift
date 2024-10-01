@@ -34,23 +34,134 @@ let numbers = line.split(separator: " ")
 print(Int(numbers[0])! + Int(numbers[1])!)
 */
 var dict: [Int:Int] = [:]
+
+let dict1: [Int:Int] = [1:1,2:1,3:1,4:1,5:1,6:1] // constant
+let dict2: [Int:Int] = [1:4,2:3,3:2,4:1,5:1,6:1] // weak desc
+let dict3: [Int:Int] = [1:1,2:1,3:1,4:2,5:3,6:4] // weak asc
+let dict4: [Int:Int] = [1:1,2:1,3:2,4:3,5:1,6:1] // random
+let dict5: [Int:Int] = [1:1,2:2,3:3,4:4,5:5,6:6] // asc
+let dict6: [Int:Int] = [1:6,2:5,3:4,4:3,5:2,6:1] // desc
+let dict7: [Int:Int] = [1:1]
+let dict8: [Int:Int] = [:]
+let dict9: [Int:Int] = [1:1,2:2,3:3,4:1,5:1,6:4] // random
+let dict10: [Int:Int] = [1:3,2:2,3:1,4:1,5:1,6:9] // random
+let dict11: [Int:Int] = [1:1,2:2,3:1,4:1,5:2,6:2] // random
+
 var numbers = 0
+var same = 0
 while let line = readLine(), line != "-2000000000" {
     guard let digit = Int(line) else { break }
     numbers += 1
+    if dict[numbers-1,default: 0] == digit {
+        same += 1
+    }
     dict[numbers,default: 0] = digit
 }
 
 
-func seqIs(_ set: Set<Int>) -> String {
+func seqIs(_ dict: [Int:Int]) -> String {
     
-    if numbers == 1 {
+    if numbers == same || numbers == 1 {
         return "CONSTANT"
     }
+    guard let first = dict[1], let second = dict[2] else { preconditionFailure("first and second failure") }
+
+    var constant = false
+    var ascending = false
+    var weaklyAscending = false
+    var descending = false
+    var weaklyDescending = false
     
+    if first > second {
+        descending = true
+        for i in 2...dict.count {
+            guard let first = dict[i-1], let second = dict[i] else { break }
+            if first - second > 1 {
+                descending = false
+                weaklyDescending = true
+            } else if first - second < 1 {
+                descending = false
+                weaklyDescending = false
+                break
+            }
+        }
+    }
     
-    return ""
+    if first < second {
+        ascending = true
+        for i in 2...dict.count {
+            guard let first = dict[i-1], let second = dict[i] else { break }
+            if second - first > 1 {
+                ascending = false
+                weaklyAscending = true
+            } else if second - first < 1 {
+                ascending = false
+                weaklyAscending = false
+                break
+            }
+        }
+    }
+    
+    if first == second {
+        constant = true
+        for i in 2...dict.count {
+            guard let first = dict[i-1], let second = dict[i] else { break }
+            if first < second {
+                constant = false
+                weaklyAscending = true
+                for j in i...dict.count {
+                    guard let first = dict[j-1], let second = dict[j] else { break }
+                    if second - first > 1 {
+                        weaklyAscending = true
+                    } else if second - first < 1 {
+                        weaklyAscending = false
+                        break
+                    }
+                }
+                break
+            } else if first > second {
+                constant = false
+                weaklyDescending = true
+                for j in i...dict.count {
+                    guard let first = dict[j-1], let second = dict[j] else { break }
+                    if first - second > 1 {
+                        weaklyDescending = true
+                    } else if first - second < 1 {
+                        weaklyDescending = false
+                        break
+                    }
+                }
+                break
+            }
+        }
+    }
+    
+    if constant {
+        return "CONSTANT"
+    } else if ascending {
+        return "ASCENDING"
+    } else if weaklyAscending {
+        return "WEAKLY ASCENDING "
+    } else if descending {
+        return "DESCENDING"
+    } else if weaklyDescending {
+        return "WEAKLY DESCENDING"
+    }
+    
+    return "RANDOM"
 }
+
+print(seqIs(dict1))
+print(seqIs(dict2))
+print(seqIs(dict3))
+print(seqIs(dict4))
+print(seqIs(dict5))
+print(seqIs(dict6))
+print(seqIs(dict7))
+print(seqIs(dict8))
+print(seqIs(dict9))
+print(seqIs(dict10))
+print(seqIs(dict11))
 
 
 
