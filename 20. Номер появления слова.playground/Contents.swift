@@ -18,14 +18,8 @@ guard arrOfLines.count > 0 else { return }
     for line in arrOfLines {
         let arrOfWords = line.split(separator: " ")
         for word in arrOfWords {
+            resultArr.append(dict[String(word), default: 0])
             dict[String(word), default: 0] += 1
-        }
-    }
-    
-    for line in arrOfLines {
-        let arrOfWords = line.split(separator: " ")
-        for word in arrOfWords {
-            resultArr.append(dict[String(word)]!)
         }
     }
     
